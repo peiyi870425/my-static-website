@@ -11,15 +11,15 @@ jobs:
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: $RELEASE_VERSION-docs.tar.gz
         run:
-          tar -czvf $RELEASE_VERSION-docs.tar.gz ./pages/
+          tar -czvf {{$RELEASE_VERSION}}-docs.tar.gz ./pages/
       - uses: actions/upload-artifact@v3
         with:
           name: upload-artifact
-          path: $RELEASE_VERSION-docs.tar.gz
+          path: {{$RELEASE_VERSION}}-docs.tar.gz
           retention-days: 1
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - run: aws s3 sync $RELEASE_VERSION-docs.tar.gz s3://peiyi-static-website
+      - run: aws s3 sync {{$RELEASE_VERSION}}-docs.tar.gz s3://peiyi-static-website
