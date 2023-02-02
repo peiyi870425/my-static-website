@@ -26,6 +26,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           #role-to-assume: arn:aws:iam::**********:role/***********
-          run: aws s3 sync ${{env.RELEASE_VERSION}}-docs.tar.gz s3://my-s3-prod-website-bucket
+      - name: upload to AWS S3
+        run: aws s3 sync ${{env.RELEASE_VERSION}}-docs.tar.gz s3://my-s3-prod-website-bucket
           
  
