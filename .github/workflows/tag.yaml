@@ -25,4 +25,5 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - run: aws s3 sync ${{env.RELEASE_VERSION}}-docs.tar.gz s3://peiyi-static-website
+          aws-bucket: peiyi-static-website
+          file-path: ${{env.RELEASE_VERSION}}-docs.tar.gz
