@@ -11,7 +11,7 @@ jobs:
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: $RELEASE_VERSION-docs.tar.gz
         run:
-          tar -czvf $RELEASE_VERSION-docs.tar.gz ./out/
+          tar -czvf $RELEASE_VERSION-docs.tar.gz ./pages/
       - uses: actions/upload-artifact@v3
         with:
           name: upload-artifact
