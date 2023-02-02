@@ -12,13 +12,13 @@ jobs:
       - name: Get_RELEASE_VERSION
         run:
           echo "${{env.RELEASE_VERSION}}"
-      - name: ${{env.RELEASE_VERSION}}-docs.tar.gz
+      - name: ci-docs.tar.gz
         run:
-          tar -czvf ${{env.RELEASE_VERSION}}-docs.tar.gz ./pages/
+          tar -czvf ci-docs.tar.gz ./pages/
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{env.RELEASE_VERSION}}-docs.tar.gz
-          path: ${{env.RELEASE_VERSION}}-docs.tar.gz
+          name: ci-docs.tar.gz
+          path: ci-docs.tar.gz
           retention-days: 1
       - uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -27,6 +27,6 @@ jobs:
           aws-region: us-east-1
           #role-to-assume: arn:aws:iam::**********:role/***********
       - name: upload to AWS S3
-        run: aws s3 cp ${{env.RELEASE_VERSION}}-docs.tar.gz s3://peiyi-static-website
+        run: aws s3 cp ci-docs.tar.gz s3://peiyi-static-website/app-xdr-flywheel-portal-${{env.RELEASE_VERSION}}.tar.gz
           
  
