@@ -1,0 +1,40 @@
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Bump Version: (ex: v1.0.2499)'
+        required: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: if manual trigger to get input version
+        if: ${{ github.event.inputs }}
+        run: echo "BUILD_VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+      - name: if not manual trigger to get release version
+        if: ${{ !github.event.inputs }}
+        run: echo "BUILD_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Print BUILD_VERSION
+        run: echo "${{env.BUILD_VERSION}}"
+      - uses: actions/checkout@v2
+      - name: ci-docs.tar.gz
+        run:
+          tar -czvf ci-docs.tar.gz ./pages/
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ci-docs.tar.gz
+          path: ci-docs.tar.gz
+          retention-days: 1
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          #role-to-assume: arn:aws:iam::**********:role/***********
+      - name: upload to AWS S3
+        run: aws s3 cp ci-docs.tar.gz s3://peiyi-static-website/app-xdr-flywheel-portal-${{env.BUILD_VERSION}}.tar.gz
+          
+ 
